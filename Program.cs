@@ -1,23 +1,41 @@
-using BookingSystem;
 using BookingSystem.Data;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var key = builder.Configuration["AppSettings:SecretKey"];
-
-// Add services to the container.
-
+//var key = builder.Configuration["AppSettings:SecretKey"];
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Description = "Enter your Bearer token in the format: Bearer {token}",
+    });
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -30,18 +48,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = "BookingSystem",
             ValidAudience = "BookingSystemUsers",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("key"))
+
+            //ValidIssuer = builder.Configuration["https://localhost:7097"],
+            //ValidAudience = builder.Configuration["https://localhost:7097"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
         };
     });
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthorization();
 
-builder.Services.AddAuthorization(options =>
-{
-    // Default policy to require any authenticated user
-    options.AddPolicy("Authenticated", policy => policy.RequireAuthenticatedUser());
-});
 var app = builder.Build();
-
-//app.UseDeveloperExceptionPage();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -53,16 +70,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
-
-/* Scheduled Jobs with Hangfire  */
-//public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs)
-//{
-//    app.UseHangfireDashboard();
-//    app.UseHangfireServer();
-
-//    RecurringJob.AddOrUpdate(() => ProcessWaitlistAndRefundCredits(), Cron.Hourly);
-//}

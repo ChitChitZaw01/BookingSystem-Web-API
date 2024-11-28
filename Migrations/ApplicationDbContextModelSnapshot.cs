@@ -75,11 +75,49 @@ namespace BookingSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(6,3)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Packages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Country = "Myanmar",
+                            Credits = 12345,
+                            ExpiryDate = new DateTime(2024, 11, 27, 15, 28, 18, 408, DateTimeKind.Local).AddTicks(8912),
+                            Name = "package1",
+                            Price = 12345.123m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Country = "Myanmar",
+                            Credits = 12345,
+                            ExpiryDate = new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7102),
+                            Name = "package2",
+                            Price = 123456.123m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Country = "Singapore",
+                            Credits = 12345,
+                            ExpiryDate = new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7130),
+                            Name = "package3",
+                            Price = 123456.123m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Country = "Singapore",
+                            Credits = 12345,
+                            ExpiryDate = new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7136),
+                            Name = "package4",
+                            Price = 123456.123m
+                        });
                 });
 
             modelBuilder.Entity("BookingSystem.Models.User", b =>

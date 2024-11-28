@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookingSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationName : Migration
+    public partial class Migration1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace BookingSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Credits = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(6,3)", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -72,6 +72,17 @@ namespace BookingSystem.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Packages",
+                columns: new[] { "Id", "Country", "Credits", "ExpiryDate", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, "Myanmar", 12345, new DateTime(2024, 11, 27, 15, 28, 18, 408, DateTimeKind.Local).AddTicks(8912), "package1", 12345.123m },
+                    { 2, "Myanmar", 12345, new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7102), "package2", 123456.123m },
+                    { 3, "Singapore", 12345, new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7130), "package3", 123456.123m },
+                    { 4, "Singapore", 12345, new DateTime(2024, 11, 27, 15, 28, 18, 410, DateTimeKind.Local).AddTicks(7136), "package4", 123456.123m }
                 });
 
             migrationBuilder.InsertData(

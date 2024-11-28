@@ -11,6 +11,8 @@ using System.Text;
 
 namespace BookingSystem.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -55,7 +57,7 @@ namespace BookingSystem.Controllers
         }
 
         // Generate JWT token
-        public string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user)
         {
             var claims = new[]
             {
