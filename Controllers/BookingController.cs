@@ -1,10 +1,12 @@
 ﻿using BookingSystem.Data;
 using BookingSystem.Models;
+using BookingSystem.Services;
 using BookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using System.Security.Claims;
 
 namespace BookingSystem.Controllers
@@ -13,41 +15,131 @@ namespace BookingSystem.Controllers
     [ApiController]
     public class BookingController : ControllerBase
     {
+        #region
         private readonly ApplicationDbContext _context;
-
-        public BookingController(ApplicationDbContext context)
+        private readonly RedisService _redisService;
+        public BookingController(RedisService redisService, ApplicationDbContext context)
         {
+            _redisService = redisService;
             _context = context;
         }
 
-        // Book a package
-        [HttpPost("book")]
-        [Authorize] // Only authenticated users can book
-        public async Task<ActionResult> BookPackage([FromBody] PackageVM request)
+        [HttpPost("book/{classId}")]
+        public IActionResult BookClass(string classId)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            bool bookingSuccessful = _redisService.TryBookClass(classId);
 
-            var package = await _context.Packages
-                .FirstOrDefaultAsync(p => p.Id == request.Id);
-            if (package == null)
+            if (bookingSuccessful)
             {
-                return NotFound("Package not found");
+                return Ok(new { message = "Booking successful!" });
             }
-
-            var booking = new Booking
+            else
             {
-                UserId = userId,
-                PackageId = package.Id,
-                BookingDate = DateTime.Now,
-                Status = "Booked"
-            };
-
-            _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Package booked successfully" });
+                return BadRequest(new { message = "Class is already fully booked!" });
+            }
         }
 
+        [HttpGet("status/{classId}")]
+        public IActionResult GetClassStatus(string classId)
+        {
+            var currentBookings = _redisService.GetCurrentBookingCount(classId);
+            return Ok(new { currentBookings, maxBookings = 5 });
+        }
+        #endregion
+        //**************stop Redis
+
+        // Book a package
+
+
+        //#region Redis 2 testing
+        //private readonly IDatabase _redisDb;
+        //private readonly int _maxSlots = 5; // Max users per class
+
+        //public BookingSystem(string redisConnectionString)
+        //{
+        //    var connection = ConnectionMultiplexer.Connect(redisConnectionString);
+        //    _redisDb = connection.GetDatabase();
+        //}
+
+        //// Attempt to book a slot for a class
+        //public async Task<bool> BookClassAsync(string classId)
+        //{
+        //    // Redis key for tracking the available slots for a class
+        //    string redisKey = $"class:{classId}:available_slots";
+
+        //    // Atomically check and decrement available slots
+        //    var availableSlots = await _redisDb.StringGetAsync(redisKey);
+
+        //    if (availableSlots.IsNullOrEmpty)
+        //    {
+        //        // If no slots are initialized yet, set the initial count (e.g., 5 slots)
+        //        await _redisDb.StringSetAsync(redisKey, _maxSlots);
+        //        availableSlots = _maxSlots;
+        //    }
+
+        //    int currentSlots = (int)availableSlots;
+
+        //    if (currentSlots > 0)
+        //    {
+        //        // Atomically decrement available slots
+        //        bool isBooked = await _redisDb.StringDecrementAsync(redisKey) > 0;
+
+        //        if (isBooked)
+        //        {
+        //            Console.WriteLine($"Booking successful for class {classId}. Remaining slots: {currentSlots - 1}");
+        //            return true;
+        //        }
+        //    }
+
+        //    Console.WriteLine($"Booking failed for class {classId}. No slots available.");
+        //    return false;
+        //}
+
+        //// Check the available slots for a class
+        //public async Task<int> GetAvailableSlotsAsync(string classId)
+        //{
+        //    string redisKey = $"class:{classId}:available_slots";
+        //    var availableSlots = await _redisDb.StringGetAsync(redisKey);
+
+        //    return availableSlots.IsNullOrEmpty ? _maxSlots : (int)availableSlots;
+        //}
+        //#endregion
+        [HttpPost("book")]
+        [Authorize] // Only authenticated users can book
+        public async Task<ActionResult> BookPackage(int packageId)
+        {
+            bool bookingSuccessful = _redisService.TryBookClass(packageId.ToString());
+
+            if (bookingSuccessful)
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                var package = await _context.Packages
+                    .FirstOrDefaultAsync(p => p.Id == packageId);
+                if (package == null)
+                {
+                    return NotFound("Package not found");
+                }
+
+                var booking = new Booking
+                {
+                    UserId = userId,
+                    PackageId = package.Id,
+                    BookingDate = DateTime.Now,
+                    Status = "Booked"
+                };
+
+                _context.Bookings.Add(booking);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Package booked successfully" });
+            }
+            else
+            {
+                return BadRequest(new { message = "Class is already fully booked!" });
+            }
+        }
+        #region Mock Functions
         // Mock AddPaymentCard method
         [HttpPost("addPaymentCard")]
         public bool AddPaymentCard(string cardNumber, string cardHolderName)
@@ -124,5 +216,6 @@ namespace BookingSystem.Controllers
                 return false;
             }
         }
+        #endregion
     }
 }

@@ -71,8 +71,24 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "BookingSystem.ViewModels.PackageVM",
+        "Name": "packageId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BookingSystem.Controllers.BookingController",
+    "Method": "BookClass",
+    "RelativePath": "api/Booking/book/{classId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],
@@ -134,6 +150,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "BookingSystem.Controllers.BookingController",
+    "Method": "GetClassStatus",
+    "RelativePath": "api/Booking/status/{classId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "BookingSystem.Controllers.PackageController",

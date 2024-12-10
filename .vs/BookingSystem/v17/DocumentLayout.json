@@ -1,71 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\User\\source\\repos\\BookingSystem\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|c:\\users\\user\\source\\repos\\bookingsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|c:\\users\\user\\source\\repos\\bookingsystem\\readme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|solutionrelative:readme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|c:\\users\\user\\source\\repos\\bookingsystem\\data\\applicationdbcontext .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51F996F5-57CA-4FF8-80FB-EB0EB5113016}|BookingSystem.csproj|solutionrelative:data\\applicationdbcontext .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 2,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ReadMe.txt",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\BookingSystem\\ReadMe.txt",
-              "RelativeDocumentMoniker": "ReadMe.txt",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\BookingSystem\\ReadMe.txt",
-              "RelativeToolTip": "ReadMe.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-11-25T00:36:54.879Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ApplicationDbContext .cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\BookingSystem\\Data\\ApplicationDbContext .cs",
-              "RelativeDocumentMoniker": "Data\\ApplicationDbContext .cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\BookingSystem\\Data\\ApplicationDbContext .cs",
-              "RelativeToolTip": "Data\\ApplicationDbContext .cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T00:26:54.969Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\BookingSystem\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\BookingSystem\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-11-25T00:19:12.304Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
